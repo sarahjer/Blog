@@ -6,6 +6,8 @@ var methodOverride = require("method-override");
 var morgan = require('morgan');  
 var passport = require('passport');  
 var jwt = require('jsonwebtoken');
+var path = require('path');
+var config = require('./config/main');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -15,6 +17,8 @@ app.set('topsecret', config.secret);
 app.use(passport.initialize());
 app.use(methodOverride("_method"));
 app.use(morgan('dev'));
+app.set('view engine', 'html');
+app.set('views',  '/views');
 
 // Connect to mongoose
 mongoose.Promise = global.Promise;
@@ -25,5 +29,9 @@ var apiRoutes = express.Router();
 
 // First Page
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname + 'views/firstpage.html'));
+    res.sendFile(path.join(__dirname + '/views/firstpage.html'));
+});
+
+app.listen(3000, function(req, res){
+   console.log("Server has started");
 });
