@@ -18,7 +18,7 @@ app.use(passport.initialize());
 app.use(methodOverride("_method"));
 app.use(morgan('dev'));
 app.set('view engine', 'html');
-app.set('views',  '/views');
+app.set('views', path.join(__dirname, 'views'));
 
 // Connect to mongoose
 mongoose.Promise = global.Promise;
@@ -29,7 +29,7 @@ var apiRoutes = express.Router();
 
 // First Page
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname + '/views/firstpage.html'));
+    res.sendFile(path.join(__dirname + '/views/header.html'));
 });
 
 apiRoutes.get('/',function(req, res){

@@ -1,0 +1,40 @@
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<h4>Login</h4>
+
+<!--<form>-->
+    <input type = "text" name = "username" placeholder = "username" id = "username">
+    <input type = "password" name = "password" placeholder = "password" id = "password">
+    <button class="btn waves-effect waves-light" id="button">Login!</button>
+<!--</form>-->
+
+<script> 
+
+$("#button").click( function(){
+    var credentials = {
+        username : document.getElementById("username").value,
+        password : document.getElementById("password").value
+    };
+    //var url = window.localStorage.getItem('appUrl');
+    console.log(credentials.username);
+        $.ajax({
+            url: url + '/login',
+            type: 'POST', 
+            data: { username: credentials.username, password: credentials.password },
+            success: function(Data) {
+                     window.localStorage.setItem('token', Data.token);
+                     window.localStorage.setItem('User', credentials.username);
+                     window.localStorage.setItem('Username', Data.user.username);
+                     window.localStorage.setItem('userID', Data.user._id);
+                     if(Data.redirect) {
+                        window.location.href = Data.redirectURL;
+                     }
+                    },
+            beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
+            error: function() {
+                    alert('Error occured');
+                    }
+        });
+        
+});
+</script>

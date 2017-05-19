@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog</title>
+<link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+<link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Cardo" rel="stylesheet">
+<!--<script src="/semantic/dist/semantic.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+  $(document).ready(function(){
+    // Set trigger and container variables
+    var trigger = $('.ui.container .menu a'),
+        container = $('#content');
+    
+    // Fire on click
+    trigger.on('click', function(){
+      // Set $this for re-use. Set target from data attribute
+      var $this = $(this),
+        target = $this.data('target');       
+      
+      // Load target page into container
+      container.load("partials/"+target);
+      
+      // Stop normal link behavior
+      return false;
+    });
+  });
+</script>
+</head>
+<body>
+ 
+ <div class="pusher">
+   <div class="ui inverted vertical masthead center aligned segment">
+
+    <div class="ui container">
+      <div class="ui large secondary inverted pointing menu">
+        <a id="button" class="active item clickable" href="#" data-target="firstpage.html">Home</a>
+        <a id="button" class="item clickable" href="#" data-target="about.html">About</a>
+        <a id="button" class="item clickable" href="#" data-target="photos.html">Photos</a>
+        <div class="right item">
+          <a class="ui inverted button">Log in</a>
+          <a class="ui inverted button">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="ui text container">
+      <h1 class="ui center aligned header">
+        COUTURE
+      </h1>
+      <h5 class="ui center aligned header">
+        A BLOGGING PLATFORM
+      </h5>
+      <hr>
+</div>
+<div id="content">
+<script> 
+$(function(){
+  $("#content").load("partials/firstpage.html"); 
+});
+$(function() {                       //run when the DOM is ready
+  $(".clickable").click(function() {  //use a class, since your ID gets mangled
+    $("a.active").removeClass("active"); //remove class from active element
+    $(this).addClass("active");      //add the class to the clicked element
+  });
+});
+</script> 
+</body>
+</html>
