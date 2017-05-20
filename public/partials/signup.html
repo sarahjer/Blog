@@ -1,0 +1,43 @@
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<div class="ui container">
+<form class="ui form" onsubmit="return submitdata();">
+    <h2 class="ui center aligned header">SIGN UP</h2>
+  <div class="field">
+    <label>Username</label>
+    <input type="text" id="username" name="username" placeholder="Username">
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="password" name="password" placeholder="Password">
+  </div>
+  <button class="ui button" type="submit">Sign Up</button>
+</form>
+<p id="success_para" ></p>
+</div>
+<script> 
+function submitdata(){
+    var credentials = {
+        username : document.getElementById("username").value,
+        password : document.getElementById("password").value
+    };
+    var url = window.localStorage.getItem('appUrl');
+    console.log(url);
+   $.ajax({
+      url: url + '/signup',
+      type: 'POST', 
+      data: { username: credentials.username, password: credentials.password },
+      success: function(Data) {
+                console.log(Data.redirect);
+                window.localStorage.setItem('token', Data.token);
+                window.localStorage.setItem('User', credentials.username);
+                if(Data.redirect) {
+                    window.location.href = Data.redirectURL;  
+               }
+              },
+      beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
+      error: function() {
+              alert('Error occured');
+              }
+    });
+}
+</script>

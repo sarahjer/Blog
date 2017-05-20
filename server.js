@@ -8,6 +8,8 @@ var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var path = require('path');
 var config = require('./config/main');
+var User = require('./models/user');
+var Blog = require('./models/blog');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -64,6 +66,60 @@ var newBlog = {
             res.json({ success: true, message: 'Successfully created new blog.' });
         }
     });
+});
+
+// Set url for API group routes
+app.use('/api', apiRoutes);
+
+// Register new users
+app.post('/signup', function(req, res) {  
+  if(!req.body.username || !req.body.password) {
+    res.json({ success: false, message: 'Please enter username and password.' });
+  } else {
+    var newUser = new User({
+      username: req.body.username,
+      password: req.body.password
+    });
+    // Attempt to save the user
+    newUser.save(function(err, user) {
+      if (err) {
+        return res.json({ success: false, message: 'That user already exists.'});
+      }
+        var token = jwt.sign(user.toObject(), config.secret, {
+            // expiresIn: 10080 // in seconds
+          });
+          res.send({ success: true, token: 'JWT ' + token, user: user, redirect: true, redirectURL: '/'});
+          console.log(user);
+    });
+  }
+});
+
+
+// Authenticate the user and get a JSON Web Token to include in the header of future requests.
+app.post('/login', function(req, res) {  
+  User.findOne(
+    {username: req.body.username.toLowerCase()}, 
+    function(err, user) {
+    if (err) 
+        console.log(err);
+    if (!user) {
+      res.send({ success: false, message: 'Authentication failed. User not found.' });
+    } else {
+      // Check if password matches
+      user.comparePassword(req.body.password, function(err, isMatch) {
+        if (isMatch && !err) {
+          // Create token if the password matched and no error was thrown
+          var token = jwt.sign(user.toObject(), config.secret, {
+            // expiresIn: 10080 // in seconds
+          });
+          res.send({ success: true, token: 'JWT ' + token, user: user, redirect: true, redirectURL: '/'});
+          
+        } else {
+          res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
+        }
+      });
+    }
+  });
 });
 
 app.listen(3000, function(req, res){

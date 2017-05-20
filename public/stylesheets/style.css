@@ -18,3 +18,7 @@ hr{
 .ui.menu:not(.vertical) .item>.button{
     margin-right: 5px;
 }
+
+.ui.form .field {
+    width: 50%;
+}

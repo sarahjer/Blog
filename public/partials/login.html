@@ -1,21 +1,26 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
-<h4>Login</h4>
-
-<!--<form>-->
-    <input type = "text" name = "username" placeholder = "username" id = "username">
-    <input type = "password" name = "password" placeholder = "password" id = "password">
-    <button class="btn waves-effect waves-light" id="button">Login!</button>
-<!--</form>-->
-
+<div class="ui container">
+<form class="ui form center aligned" onsubmit="return submitdata();">
+    <h2 class="ui center aligned header">LOG IN</h2>
+  <div class="field">
+    <label>Username</label>
+    <input class="ui center aligned" id="username" type="text"  placeholder="Username">
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="password"  placeholder="Password">
+  </div>
+  <button class="ui button" type="submit">Login</button>
+</form>
+</div>
 <script> 
 
-$("#button").click( function(){
+function submitdata(){
     var credentials = {
         username : document.getElementById("username").value,
         password : document.getElementById("password").value
     };
-    //var url = window.localStorage.getItem('appUrl');
+    var url = window.localStorage.getItem('appUrl');
     console.log(credentials.username);
         $.ajax({
             url: url + '/login',
@@ -36,5 +41,5 @@ $("#button").click( function(){
                     }
         });
         
-});
+}
 </script>

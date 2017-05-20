@@ -10,6 +10,33 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
   $(document).ready(function(){
+    var url = 'http://localhost:3000';
+    window.localStorage.setItem('appUrl',url);
+    var html1 = "",
+        html2 = "",
+        html3 = "",
+        html4 = "";
+        currentUser = window.localStorage.getItem('User'),
+        html1 += ('<a class="ui inverted button" href="#" data-target="login.html">Log in</a>'); 
+        html2 = ('<a class="ui inverted button" href="#" data-target="signup.html">Sign Up</a>');
+        html3 += ('<a class="ui inverted button">Signed In As '+ currentUser +'</a>');
+        html4 += ('<a class="ui inverted button logout" href="#" data-target="firstpage.html">Log Out</a>');
+        console.log(window.localStorage.getItem('token'));
+    if(!(window.localStorage.getItem('token'))){
+    $('#login').append(html1);
+    $('#signup').append(html2);
+    } else {
+        $('#signedin').append(html3);
+        $('#logout').append(html4);
+    }
+$('.logout').click(function(){
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('Username');
+    window.localStorage.removeItem('User');
+    window.localStorage.removeItem('userID');
+    window.location.href = ('/');
+    //$(this).addClass("active");
+});
     // Set trigger and container variables
     var trigger = $('.ui.container .menu a'),
         container = $('#content');
@@ -18,8 +45,9 @@
     trigger.on('click', function(){
       // Set $this for re-use. Set target from data attribute
       var $this = $(this),
-        target = $this.data('target');       
-      
+        target = $this.data('target'); 
+        console.log(target);  
+        console.log($this);    
       // Load target page into container
       container.load("partials/"+target);
       
@@ -33,19 +61,21 @@
  
  <div class="pusher">
    <div class="ui inverted vertical masthead center aligned segment">
-
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
         <a id="button" class="active item clickable" href="#" data-target="firstpage.html">Home</a>
         <a id="button" class="item clickable" href="#" data-target="about.html">About</a>
         <a id="button" class="item clickable" href="#" data-target="photos.html">Photos</a>
         <div class="right item">
-          <a class="ui inverted button">Log in</a>
-          <a class="ui inverted button">Sign Up</a>
+          <a id="login"></a>
+          <a id="signup"></a>
+          <a id="signedin"></a>
+          <a id="logout"></a>
         </div>
       </div>
     </div>
   </div>
+ </div>
 <div class="ui text container">
       <h1 class="ui center aligned header">
         COUTURE
@@ -55,7 +85,7 @@
       </h5>
       <hr>
 </div>
-<div id="content">
+<div id="content"></div>
 <script> 
 $(function(){
   $("#content").load("partials/firstpage.html"); 
