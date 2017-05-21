@@ -1,4 +1,4 @@
 module.exports = {  
-'secret': 'somethingtopsecrethere',  
+'secret': 'topsecret',  
 'database': 'mongodb://localhost/blog'  
 };

@@ -89,7 +89,6 @@ app.post('/signup', function(req, res) {
             // expiresIn: 10080 // in seconds
           });
           res.send({ success: true, token: 'JWT ' + token, user: user, redirect: true, redirectURL: '/'});
-          console.log(user);
     });
   }
 });
