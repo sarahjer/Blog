@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
 <link rel="stylesheet" href="/stylesheets/style.css" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Cardo" rel="stylesheet">
-<!--<script src="/semantic/dist/semantic.min.js"></script>-->
+<script src="/semantic/dist/semantic.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
@@ -16,7 +16,7 @@
         html2 = "",
         html3 = "",
         html4 = "";
-        currentUser = window.localStorage.getItem('Username'),
+        currentUser = window.localStorage.getItem('User'),
         html1 += ('<a class="ui inverted button" href="#" data-target="login.html">Log in</a>'); 
         html2 = ('<a class="ui inverted button" href="#" data-target="signup.html">Sign Up</a>');
         html3 += ('<a class="ui inverted button">Signed In As '+ currentUser +'</a>');
@@ -45,9 +45,7 @@ $('.logout').click(function(){
     trigger.on('click', function(){
       // Set $this for re-use. Set target from data attribute
       var $this = $(this),
-        target = $this.data('target'); 
-        console.log(target);  
-        console.log($this);    
+        target = $this.data('target');     
       // Load target page into container
       container.load("partials/"+target);
       

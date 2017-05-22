@@ -1,21 +1,21 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <div class="ui container">
-<form class="ui form center aligned" onsubmit="return submitdata();">
+<form class="ui form center aligned" id="idForm" method="POST">
     <h2 class="ui center aligned header">LOG IN</h2>
   <div class="field">
     <label>Username</label>
-    <input class="ui center aligned" id="username" type="text"  placeholder="Username">
+    <input class="ui center aligned" id="username" name="username" type="text"  placeholder="Username">
   </div>
   <div class="field">
     <label>Password</label>
-    <input type="password" id="password"  placeholder="Password">
+    <input type="password" id="password" name="password" placeholder="Password">
   </div>
   <button class="ui button" type="submit">Login</button>
 </form>
 </div>
 <script> 
 
-function submitdata(){
+$("#idForm").submit(function(e) {
     var credentials = {
         username : document.getElementById("username").value,
         password : document.getElementById("password").value
@@ -25,7 +25,7 @@ function submitdata(){
         $.ajax({
             url: url + '/login',
             type: 'POST', 
-            data: { username: credentials.username, password: credentials.password },
+            data: $("#idForm").serialize(),
             success: function(Data) {
                      window.localStorage.setItem('token', Data.token);
                      window.localStorage.setItem('User', credentials.username);
@@ -37,9 +37,9 @@ function submitdata(){
                     },
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
             error: function() {
-                    alert('Error occured');
+                    console.log('Error occured');
                     }
         });
-        
-}
+        return false;
+});
 </script>

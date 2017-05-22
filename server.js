@@ -22,6 +22,9 @@ app.use(morgan('dev'));
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
+// Bring in defined Passport Strategy
+require('./config/passport')(passport);
+
 // Connect to mongoose
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
