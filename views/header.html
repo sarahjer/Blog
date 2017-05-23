@@ -65,6 +65,9 @@ $('.logout').click(function(){
         <a id="button" class="item clickable" href="#" data-target="about.html">About</a>
         <a id="button" class="item clickable" href="#" data-target="photos.html">Photos</a>
         <div class="right item">
+          <button class="ui icon inverted button add">
+            <i class="plus icon"></i>
+          </button>  
           <a id="login"></a>
           <a id="signup"></a>
           <a id="signedin"></a>
@@ -93,6 +96,13 @@ $(function() {                       //run when the DOM is ready
     $("a.active").removeClass("active"); //remove class from active element
     $(this).addClass("active");      //add the class to the clicked element
   });
+});
+$('.add').click( function(){
+if(!(window.localStorage.getItem('token'))){
+    $('#content').load("partials/login.html");
+} else {
+    $('#content').load("partials/new.html");
+    }
 });
 </script> 
 </body>
