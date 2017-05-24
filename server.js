@@ -48,12 +48,12 @@ apiRoutes.get('/',function(req, res){
     
 });
 
-app.post("/blog/new", passport.authenticate('jwt', { session: false }), function(req, res){
+app.post("/new", passport.authenticate('jwt', { session: false }), function(req, res){
     // get data from form and add to campgrounds array
 var newBlog = {
-     name : req.body.name,
-     image : req.body.image,
-     desc : req.body.description,
+     title : req.body.title,
+     text : req.body.text,
+     image : req.body.file,
      author : {
         'id': req.user._id,
         'username': req.user.username
@@ -66,7 +66,7 @@ var newBlog = {
         } else {
             // redirect to blog page
             console.log(newlyCreated);
-            res.json({ success: true, message: 'Successfully created new blog.' });
+            res.json({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });
 });

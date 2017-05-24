@@ -4,19 +4,43 @@
     <h2 class="ui center aligned header">Create a New Blog</h2>
   <div class="field">
     <label>Title</label>
-    <input class="ui center aligned" id="username" name="username" type="text"  placeholder="Blog Title"></input>
+    <input class="ui center aligned" id="title" name="title" type="text"  placeholder="Blog Title"></input>
   </div>
   <div class="field">
     <label>Text</label>
-    <textarea></textarea>
+    <textarea id="text"></textarea>
   </div>
   <div class="field">
     <label>Image</label>
-    <input type="file" />
+    <input type="file" id="file" />
   </div>
   <button class="ui button" type="submit">Submit</button>
 </form>
 </div>
 <script> 
 
+$("#idForm").submit(function(e) {
+      var blog = {
+        title: document.getElementById("title").value,
+        text: document.getElementById("text").value,
+        image: document.getElementById("file").value,
+      };
+      var url = window.localStorage.getItem('appUrl');
+      $.ajax({
+              url: url + '/new',
+              type: 'POST', 
+              data: $("#idForm").serialize(),
+              beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
+              success: function(data) {
+                console.log(data);
+                if(data.redirect) {
+                            window.location.href = data.redirectURL;
+                }
+              },
+              error: function(data){
+                console.log(data);
+              }
+      });
+      return false;
+});
 </script>
