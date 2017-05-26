@@ -3,15 +3,40 @@
 <div class="ui container">
     <div class="ui card">
         <a class="image" href="#">
-            <img src="https://4.bp.blogspot.com/-4MU14nPxmxU/VynsLEFY1YI/AAAAAAAAD2k/vmYk4OcfcrQtGhv_sKGxXmDRofYgLm3NwCLcB/s640/3-1.jpg">
+            <div id ="blog">
         </a>
-        <div class="content">
-            <a class="header" href="#"></a>
-            <div class="meta">
+        <div class="content"></div>
+            <!--<a class="header" href="#"></a>-->
+            <!--<div class="meta">
                 <a>Sport</a>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
-   
+ <script> 
+ $(document).ready(function() {
+ var url = window.localStorage.getItem('appUrl'); 
+   $.ajax({
+        url: url + '/api/blogs',
+        type: 'GET', 
+        //beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
+        success: function(data) {
+            var blogs = JSON.parse(data);
+            $.each(blogs , function (i, blog) {
+                $.each(blog,function(j, blog){
+                    var html = "";
+                    html += ('<div class="ui card">' + blog.title + '</div><a class="image" href="#">'); 
+                    $("#blog").append(html);
+                    console.log(blog);
+                })
+                }); 
+
+            return data;
+        },
+        error: function(data){
+          console.log(data);
+        }
+});
+});
+</script>
 

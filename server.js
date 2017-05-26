@@ -37,7 +37,7 @@ app.get('/', function(req, res){
     res.sendFile(path.join(__dirname + '/views/header.html'));
 });
 
-apiRoutes.get('/',function(req, res){
+apiRoutes.get('/blogs',function(req, res){
      Blog.find({}, function(err, allblogs){
         if(err){
             console.log(err);
