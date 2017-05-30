@@ -8,11 +8,11 @@
   </div>
   <div class="field">
     <label>Text</label>
-    <textarea id="text"></textarea>
+    <textarea id="text" name="text"></textarea>
   </div>
   <div class="field">
     <label>Image</label>
-    <input type="file" id="file" />
+    <input type="file" id="img_file" name="img_file" />
   </div>
   <button class="ui button" type="submit">Submit</button>
 </form>
@@ -23,7 +23,7 @@ $("#idForm").submit(function(e) {
       var blog = {
         title: document.getElementById("title").value,
         text: document.getElementById("text").value,
-        image: document.getElementById("file").value,
+        image: document.getElementById("img_file").value,
       };
       var url = window.localStorage.getItem('appUrl');
       $.ajax({

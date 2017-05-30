@@ -25,7 +25,7 @@
             $.each(blogs , function (i, blog) {
                 $.each(blog,function(j, blog){
                     var html = "";
-                    html += ('<div class="ui card">' + blog.title + '</div><a class="image" href="#">'); 
+                    html += ('<div class="ui card">' + blog.text + '</div><a class="image" href="#">'); 
                     $("#blog").append(html);
                     console.log(blog);
                 })
