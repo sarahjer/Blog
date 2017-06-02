@@ -11,6 +11,7 @@ var config = require('./config/main');
 var User = require('./models/user');
 var Blog = require('./models/blog');
 var fs = require('fs');
+var multer = require('multer');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -23,11 +24,33 @@ app.use(morgan('dev'));
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(multer({ dest: './uploads/',
- rename: function (fieldname, filename) {
-   return filename;
- },
-}));
+// app.use(multer({ dest: './uploads/',
+//  rename: function (fieldname, filename) {
+//    return filename;
+//  },
+// }).single('userPhoto'));
+
+var upload = multer({ dest: 'uploads/' })
+
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
 
 // Bring in defined Passport Strategy
 require('./config/passport')(passport);
@@ -55,23 +78,22 @@ apiRoutes.get('/blogs',function(req, res){
     
 });
 
-app.post("/new", passport.authenticate('jwt', { session: false }), function(req, res){
+app.post("/new",upload.single('userPhoto'), function(req, res){
     // get data from form and add to campgrounds array
     var newBlog = new Blog();
-    newBlog.img.data = fs.readFileSync(req.files.userPhoto.path)
+    newBlog.img.data = fs.readFileSync(req.file.userPhoto.path)
     newBlog.img.contentType = 'image/png';
     newBlog.title = req.body.title;
-    newBlog.text = req.body.text;
-    newBlog.author.id = req.user._id;
-    newBlog.author.username = req.user.username;
-    newBlog.save();
+    newBlog.text = req.body.text;  
 // Create a new blog and save to DB
-    Blog.create(newBlog, function(err, newlyCreated){
+    Blog.create(newBlog, function(err, newBlog){
         if(err) {
           return res.json({ success: false, message: 'Cannot create blog.', });
         } else {
             // redirect to blog page
-            console.log(newlyCreated);
+            newBlog.author.id = req.user._id;
+            newBlog.author.username = req.user.username;
+            newBlog.save();
             res.json({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });
