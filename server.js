@@ -10,6 +10,7 @@ var path = require('path');
 var config = require('./config/main');
 var User = require('./models/user');
 var Blog = require('./models/blog');
+var fs = require('fs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
