@@ -23,6 +23,12 @@ app.use(morgan('dev'));
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(multer({ dest: './uploads/',
+ rename: function (fieldname, filename) {
+   return filename;
+ },
+}));
+
 // Bring in defined Passport Strategy
 require('./config/passport')(passport);
 
@@ -51,15 +57,14 @@ apiRoutes.get('/blogs',function(req, res){
 
 app.post("/new", passport.authenticate('jwt', { session: false }), function(req, res){
     // get data from form and add to campgrounds array
-var newBlog = {
-     title : req.body.title,
-     text : req.body.text,
-     image : req.body.file,
-     author : {
-        'id': req.user._id,
-        'username': req.user.username
-    },
-};    
+    var newBlog = new Blog();
+    newBlog.img.data = fs.readFileSync(req.files.userPhoto.path)
+    newBlog.img.contentType = 'image/png';
+    newBlog.title = req.body.title;
+    newBlog.text = req.body.text;
+    newBlog.author.id = req.user._id;
+    newBlog.author.username = req.user.username;
+    newBlog.save();
 // Create a new blog and save to DB
     Blog.create(newBlog, function(err, newlyCreated){
         if(err) {
