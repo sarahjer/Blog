@@ -12,6 +12,7 @@ var User = require('./models/user');
 var Blog = require('./models/blog');
 var fs = require('fs');
 var multer = require('multer');
+var upload = multer({ dest: '/uploads' });
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -30,7 +31,6 @@ app.set('views', path.join(__dirname, 'views'));
 //  },
 // }).single('userPhoto'));
 
-var upload = multer({ dest: 'uploads/' })
 
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
@@ -78,10 +78,12 @@ apiRoutes.get('/blogs',function(req, res){
     
 });
 
-app.post("/new",upload.single('userPhoto'), function(req, res){
-    // get data from form and add to campgrounds array
+app.post("/new",upload.single('file'), function(req, res){
+    //get data from form and add to campgrounds array
+    var tmp_path = req.file.path;
+    //var target_path = 'uploads/' + req.file.originalname;
     var newBlog = new Blog();
-    newBlog.img.data = fs.readFileSync(req.file.userPhoto.path)
+    newBlog.img.data = fs.readFileSync(tmp_path);
     newBlog.img.contentType = 'image/png';
     newBlog.title = req.body.title;
     newBlog.text = req.body.text;  
@@ -97,6 +99,8 @@ app.post("/new",upload.single('userPhoto'), function(req, res){
             res.json({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });
+    console.log('files:', req.file);
+    console.log('body:', req.body);
 });
 
 // Set url for API group routes
