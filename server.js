@@ -78,24 +78,25 @@ apiRoutes.get('/blogs',function(req, res){
     
 });
 
-app.post("/new",upload.single('file'), function(req, res){
-    //get data from form and add to campgrounds array
-    var tmp_path = req.file.path;
+app.post("/new",passport.authenticate('jwt', { session: false }), upload.single('file'),  function(req, res){
+  // get data from form and add to campgrounds array
+     var tmp_path = req.file.path;
     //var target_path = 'uploads/' + req.file.originalname;
     var newBlog = new Blog();
-    newBlog.img.data = fs.readFileSync(tmp_path);
-    newBlog.img.contentType = 'image/png';
+    newBlog.image.data = fs.readFileSync(tmp_path);
+    newBlog.image.contentType = 'image/*';
     newBlog.title = req.body.title;
     newBlog.text = req.body.text;  
+    newBlog.author.id = req.user._id;
+    newBlog.author.username = req.user.username;
+    newBlog.save();
 // Create a new blog and save to DB
     Blog.create(newBlog, function(err, newBlog){
         if(err) {
           return res.json({ success: false, message: 'Cannot create blog.', });
         } else {
             // redirect to blog page
-            newBlog.author.id = req.user._id;
-            newBlog.author.username = req.user.username;
-            newBlog.save();
+            
             res.json({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });

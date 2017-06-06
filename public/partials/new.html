@@ -1,6 +1,6 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <div class="ui container">
-<form class="ui form center aligned" id="idForm" method="POST" enctype="multipart/form-data" action="new">
+<form class="ui form center aligned" id="idForm" method="POST" enctype="multipart/form-data" action="/new">
     <h2 class="ui center aligned header">Create a New Blog</h2>
   <div class="field">
     <label>Title</label>
@@ -12,7 +12,7 @@
   </div>
   <div class="field">
     <label>Image</label>
-    <input type="file" id="file" name="file"   accept="image/*"/>
+    <input type="file" id="file" name="file" accept="image/*"/>
   </div>
   <button class="ui button" type="submit">Submit</button>
 </form>
@@ -20,15 +20,10 @@
 <script> 
 
 $("#idForm").submit(function(e) {
-      var blog = {
-        title: document.getElementById("title").value,
-        text: document.getElementById("text").value,
-        image: document.getElementById("file").value,
-      };
       var data = new FormData();
-      jQuery.each(jQuery('#file')[0].files, function(i, file) {
-      data.append('file-'+i, file);
-    });
+      data.append('file', file, file.name);
+      data.append('title', text, text.name);
+      data.append('text', text, text.name);
       var url = window.localStorage.getItem('appUrl');
       $.ajax({
               url: url + '/new',
@@ -47,6 +42,5 @@ $("#idForm").submit(function(e) {
                 console.log(data);
               }
       });
-      return false;
 });
 </script>
