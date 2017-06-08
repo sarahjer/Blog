@@ -12,7 +12,7 @@
   </div>
   <div class="field">
     <label>Image</label>
-    <input type="file" id="file" name="file" accept="image/*"/>
+    <input type="file" id="file" name="imgFile" accept="image/*"/>
   </div>
   <button class="ui button" type="submit">Submit</button>
 </form>
@@ -21,7 +21,7 @@
 
 $("#idForm").submit(function(e) {
       var data = new FormData();
-      data.append('file', file, file.name);
+      data.append('imgFile', file, file.name);
       data.append('title', text, text.name);
       data.append('text', text, text.name);
       var url = window.localStorage.getItem('appUrl');

@@ -78,7 +78,7 @@ apiRoutes.get('/blogs',function(req, res){
     
 });
 
-app.post("/new",passport.authenticate('jwt', { session: false }), upload.single('file'),  function(req, res){
+app.post("/new", upload.single('imgFile'), passport.authenticate('jwt', { session: false }),  function(req, res){
   // get data from form and add to campgrounds array
      var tmp_path = req.file.path;
     //var target_path = 'uploads/' + req.file.originalname;
@@ -147,7 +147,7 @@ app.post('/login', function(req, res) {
           var token = jwt.sign(user.toObject(), config.secret, {
             // expiresIn: 10080 // in seconds
           });
-          res.send({ success: true, token: 'JWT ' + token, user: user, redirect: true, redirectURL: '/'});
+          res.send({ success: true, token: 'JWT ' + token, user: user,file: file, redirect: true, redirectURL: '/'});
           
         } else {
           res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
