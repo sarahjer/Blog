@@ -12,7 +12,15 @@ var User = require('./models/user');
 var Blog = require('./models/blog');
 var fs = require('fs');
 var multer = require('multer');
-var upload = multer({ dest: '/uploads' });
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './uploads');
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.fieldname + '-' + Date.now());
+  }
+});
+var upload = multer({dest: "./uploads"});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -80,23 +88,28 @@ apiRoutes.get('/blogs',function(req, res){
 
 app.post("/new", upload.single('imgFile'), passport.authenticate('jwt', { session: false }),  function(req, res){
   // get data from form and add to campgrounds array
-     var tmp_path = req.file.path;
-    //var target_path = 'uploads/' + req.file.originalname;
     var newBlog = new Blog();
+    newBlog.author.id = req.user._id;
+    newBlog.author.username = req.user.username;
+     if (!authorized) {
+        res.send(403);
+    } else {
+        next();
+    }
+},multer({ dest: '/uploads/' }), function(req, res){
+      var tmp_path = req.file.path;
+    //var target_path = 'uploads/' + req.file.originalname;
     newBlog.image.data = fs.readFileSync(tmp_path);
     newBlog.image.contentType = 'image/*';
     newBlog.title = req.body.title;
     newBlog.text = req.body.text;  
-    newBlog.author.id = req.user._id;
-    newBlog.author.username = req.user.username;
-    newBlog.save();
+    newBlog.save();    
 // Create a new blog and save to DB
     Blog.create(newBlog, function(err, newBlog){
         if(err) {
           return res.json({ success: false, message: 'Cannot create blog.', });
         } else {
-            // redirect to blog page
-            
+            // redirect to blog page   
             res.json({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });
@@ -147,7 +160,7 @@ app.post('/login', function(req, res) {
           var token = jwt.sign(user.toObject(), config.secret, {
             // expiresIn: 10080 // in seconds
           });
-          res.send({ success: true, token: 'JWT ' + token, user: user,file: file, redirect: true, redirectURL: '/'});
+          res.send({ success: true, token: 'JWT ' + token, user: user, redirect: true, redirectURL: '/'});
           
         } else {
           res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
