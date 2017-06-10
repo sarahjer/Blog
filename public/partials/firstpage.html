@@ -1,5 +1,4 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-</script>
 <div class="ui container">
     <div class="ui card">
         <a class="image" href="#">
@@ -9,8 +8,8 @@
         </div>
     </div>
 </div>
- <script> 
 
+<script> 
  function hexToBase64(str) {
     return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
 }
@@ -22,17 +21,15 @@
         type: 'GET', 
         //beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
         success: function(data) {
+            //console.log(data);
             var blogs = JSON.parse(data);
             $.each(blogs , function (i, blog) {
                 $.each(blog,function(j, blog){
-                    var img = document.createElement('img');
-                    //img.src = 'data:image/jpeg;base64,' + btoa(""+blog.image.data);
-                    //document.body.appendChild(img);
-                    img.src = 'data:image/jpeg;base64,' + hexToBase64(""+blog.image.data);
+                    var vals = btoa(blog.image.data.data);
                     var html = "";
-                    html += ('<img class="ui card" src=' + img.src + '><a class="image" href="#">'); 
+                    html += ('<img class="ui card" src="data:image/jpeg;base64,/' + vals + '"alt="">'); 
                     $("#blog").append(html);
-                    console.log(img);
+                    console.log(vals);
                 })
                 }); 
 

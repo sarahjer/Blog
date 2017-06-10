@@ -20,7 +20,8 @@ var storage =   multer.diskStorage({
     callback(null, file.fieldname + '-' + Date.now());
   }
 });
-var upload = multer({dest: "./uploads"});
+var upload = multer({storage:storage});
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -80,25 +81,20 @@ apiRoutes.get('/blogs',function(req, res){
         if(err){
             console.log(err);
         } else {
+            
             res.send(JSON.stringify({blogs: allblogs}));
         }
     });
     
 });
 
-app.post("/new", upload.single('imgFile'), passport.authenticate('jwt', { session: false }),  function(req, res){
+app.post("/new", upload.single('imgFile'),  function(req, res){
   // get data from form and add to campgrounds array
     var newBlog = new Blog();
-    newBlog.author.id = req.user._id;
-    newBlog.author.username = req.user.username;
-     if (!authorized) {
-        res.send(403);
-    } else {
-        next();
-    }
-},multer({ dest: '/uploads/' }), function(req, res){
-      var tmp_path = req.file.path;
-    //var target_path = 'uploads/' + req.file.originalname;
+    // newBlog.author.id = req.user._id;
+    // newBlog.author.username = req.user.username;
+    var tmp_path = req.file.path;    
+  //var target_path = 'uploads/' + req.file.originalname;
     newBlog.image.data = fs.readFileSync(tmp_path);
     newBlog.image.contentType = 'image/*';
     newBlog.title = req.body.title;

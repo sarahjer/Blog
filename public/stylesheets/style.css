@@ -11,6 +11,14 @@ h5.ui.header{
     color: darkgoldenrod;
 }
 
+/*h2.ui.header{
+    margin-top: 0;
+    color: darkslategray;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    font-family: 'Cardo', serif;
+}*/
+
 hr{
     width: 40%;
 }
