@@ -19,7 +19,6 @@
    $.ajax({
         url: url + '/api/blogs',
         type: 'GET', 
-        //beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
         success: function(data) {
             //console.log(data);
             var blogs = JSON.parse(data);
