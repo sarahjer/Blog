@@ -1,9 +1,12 @@
 var mongoose = require("mongoose");
 
 var blogSchema = new mongoose.Schema({
+    id: {
+            type: mongoose.Schema.Types.ObjectId
+    },
     title: String,
     text: String,
-    image: { data: Buffer, contentType: String },
+    image: { data: String, contentType: String },
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

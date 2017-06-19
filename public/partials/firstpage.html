@@ -4,14 +4,16 @@
         <a class="image" href="#">
             <div id ="blog">
         </a>
-        <div class="content"></div>
+        <div class="content">
+           
+        </div>
         </div>
     </div>
 </div>
 
 <script> 
  function hexToBase64(str) {
-    return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
+    return btoa(String.fromCharCode.apply(null, str.toString().replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
 }
 
  $(document).ready(function() {
@@ -20,22 +22,23 @@
         url: url + '/api/blogs',
         type: 'GET', 
         success: function(data) {
-            //console.log(data);
-            var blogs = JSON.parse(data);
-            $.each(blogs , function (i, blog) {
-                $.each(blog,function(j, blog){
-                    var vals = btoa(blog.image.data.data);
+            // var blogs = JSON.parse(data);
+            
+            // $.each(blogs , function (i, blog) {
+            //     $.each(blog,function(j, blog){
+            //         var vals = btoa(blog.image.data.data);
                     var html = "";
-                    html += ('<img class="ui card" src="data:image/jpeg;base64,/' + vals + '"alt="">'); 
-                    $("#blog").append(html);
-                    console.log(vals);
-                })
-                }); 
+                    // console.log(data);
+                    // html += ('<img class="ui card" src="data:image/png;base64,' + data + '">'); 
+                    // $("#blog").append(html);
+                    // console.log(vals);
+                // })
+                // }); 
 
-            return data;
+        //     return data;
         },
         error: function(data){
-          console.log(data);
+        //   console.log(data);
         }
 });
 });

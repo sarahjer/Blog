@@ -34,11 +34,11 @@ app.use(morgan('dev'));
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
-// app.use(multer({ dest: './uploads/',
-//  rename: function (fieldname, filename) {
-//    return filename;
-//  },
-// }).single('userPhoto'));
+app.use(multer({ dest: './uploads/',
+ rename: function (fieldname, filename) {
+   return filename;
+ },
+}).single('imgFile'));
 
 
 if (app.get('env') === 'development') {
@@ -79,21 +79,32 @@ app.get('/', function(req, res){
 apiRoutes.get('/blogs',function(req, res){
      Blog.find({}, function(err, allblogs){
         if(err){
-            console.log(err);
+            throw err;
         } else {
-            res.send(JSON.stringify({blogs: allblogs}));
+          var base64 = (allblogs[1].image.data.toString('base64'));
+          res.send(base64); 
+            // res.send(JSON.stringify({blogs: allblogs}));
         }
-    });
-    
+    });    
 });
 
-app.post("/new", upload.single('imgFile'),  function(req, res){
+// apiRoutes.get('/blogs', function (req, res) {
+//     res.sendFile(path.resolve('./uploads/1eb2fbf09587f2cdac3a02eb6cb1f798'  ));
+// }); 
+
+app.post("/new", function(req, res){
   // get data from form and add to campgrounds array
     var newBlog = new Blog();
-    // newBlog.author.id = req.user._id;
-    // newBlog.author.username = req.user.username;
-    var tmp_path = req.file.path;    
-  //var target_path = 'uploads/' + req.file.originalname;
+    var tmp_path = req.file.path; 
+    var target_path = './uploads/' + req.file.originalname;
+    fs.rename(tmp_path, target_path, function(err) {
+        if (err) throw err;
+        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+        fs.unlink(tmp_path, function() {
+            if (err) throw err;
+            console.log('File uploaded to: ' + target_path);
+        });
+    });
     newBlog.image.data = fs.readFileSync(tmp_path);
     newBlog.image.contentType = 'image/*';
     newBlog.title = req.body.title;
@@ -105,7 +116,7 @@ app.post("/new", upload.single('imgFile'),  function(req, res){
           return res.json({ success: false, message: 'Cannot create blog.', });
         } else {
             // redirect to blog page   
-            res.json({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
+            res.send({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });
     console.log('files:', req.file);
