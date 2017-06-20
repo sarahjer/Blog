@@ -81,15 +81,19 @@ apiRoutes.get('/blogs',function(req, res){
         if(err){
             throw err;
         } else {
-          var base64 = (allblogs[1].image.data.toString('base64'));
-          res.send(base64); 
-            // res.send(JSON.stringify({blogs: allblogs}));
+          console.log(allblogs.length);
+          for(var i=0; i<allblogs.length; i++){
+            var base64 = (allblogs[i].image.data.toString('base64'));
+            console.log(allblogs[i].image.data);
+            res.write(base64);
+          }
+            res.end();
         }
     });    
 });
 
 // apiRoutes.get('/blogs', function (req, res) {
-//     res.sendFile(path.resolve('./uploads/1eb2fbf09587f2cdac3a02eb6cb1f798'  ));
+//     res.sendFile(path.resolve('./uploads/Photos-Camping.jpg'));
 // }); 
 
 app.post("/new", function(req, res){
@@ -119,8 +123,6 @@ app.post("/new", function(req, res){
             res.send({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });
-    console.log('files:', req.file);
-    console.log('body:', req.body);
 });
 
 // Set url for API group routes

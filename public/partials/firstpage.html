@@ -12,9 +12,9 @@
 </div>
 
 <script> 
- function hexToBase64(str) {
-    return btoa(String.fromCharCode.apply(null, str.toString().replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
-}
+//  function hexToBase64(str) {
+//     return btoa(String.fromCharCode.apply(null, str.toString().replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
+// }
 
  $(document).ready(function() {
  var url = window.localStorage.getItem('appUrl'); 
@@ -29,8 +29,8 @@
             //         var vals = btoa(blog.image.data.data);
                     var html = "";
                     // console.log(data);
-                    // html += ('<img class="ui card" src="data:image/png;base64,' + data + '">'); 
-                    // $("#blog").append(html);
+                    html += ('<img class="ui card" src="data:image/png;base64,' + data + '">'); 
+                    // $("#blog").append(data);
                     // console.log(vals);
                 // })
                 // }); 
