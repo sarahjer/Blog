@@ -84,10 +84,10 @@ apiRoutes.get('/blogs',function(req, res){
           console.log(allblogs.length);
           for(var i=0; i<allblogs.length; i++){
             var base64 = (allblogs[i].image.data.toString('base64'));
-            console.log(allblogs[i].image.data);
+            // console.log(allblogs[i].image.data);
             res.write(base64);
           }
-            res.end();
+            res.end(JSON.stringify({allblogs}));
         }
     });    
 });
@@ -119,7 +119,8 @@ app.post("/new", function(req, res){
         if(err) {
           return res.json({ success: false, message: 'Cannot create blog.', });
         } else {
-            // redirect to blog page   
+            // redirect to blog page    
+            // res.setHeader("Content-Type", "application/json");
             res.send({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });

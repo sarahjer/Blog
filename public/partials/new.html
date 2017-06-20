@@ -1,5 +1,8 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <div class="ui container">
+  <div id="response">
+    <pre></pre>
+</div>
 <form class="ui form center aligned" id="idForm"  action="/new" method=POST enctype="multipart/form-data" >
     <h2 class="ui center aligned header">Create a New Blog</h2>
   <div class="field">
@@ -20,26 +23,26 @@
 <script> 
 
 $("#idForm").submit(function(e) {
-  var data = $(this).serialize();
+      var data = new FormData();
+      data.append('imgFile', file, file.name);
+      data.append('title', text, text.name);
+      data.append('text', text, text.name);
       var url = window.localStorage.getItem('appUrl');
-      $.post({
-              url: url + '/new', 
-              data: data,
-              // beforeSend: function(xhr){xhr.setRequestHeader('Authorization', window.localStorage.getItem('token'));},
-              // contentType: false,
-              processData: false,
-              // async: false,
-              cache: false,
-              success: function(data) {
-                console.log(data);
-                if(data.redirect) {
-                    window.location.href = data.redirectURL;
-                }
-              }
-              // error: function(data){
-              //   console.log(data);
-              // }
-      });
-      // return false;
+      $.post(
+              url + '/new', 
+              data,
+              function(data, textStatus, jqXHR){
+               $('#response pre').html( data )
+                  if(data.redirect) {
+                      window.location.href = data.redirectURL;
+                  }
+              }       
+      )
+                .fail(function(jqXhr, textStatus, errorThrown){
+                console.log(errorThrown );
+              });
+
+      e.preventDefault();
+  
 });
 </script>
