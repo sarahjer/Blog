@@ -109,7 +109,15 @@ app.post("/new", function(req, res){
             console.log('File uploaded to: ' + target_path);
         });
     });
-    newBlog.image.data = fs.readFileSync(tmp_path);
+    try {
+        newBlog.image.data = fs.readFileSync(target_path);
+    } catch(err){
+        if (err.code === 'ENOENT') {
+          console.log('File not found!');
+        } else {
+          throw err;
+        }
+    }
     newBlog.image.contentType = 'image/*';
     newBlog.title = req.body.title;
     newBlog.text = req.body.text;  
@@ -120,7 +128,7 @@ app.post("/new", function(req, res){
           return res.json({ success: false, message: 'Cannot create blog.', });
         } else {
             // redirect to blog page    
-            // res.setHeader("Content-Type", "application/json");
+            res.setHeader("Content-Type", "text/html");
             res.send({ success: true, message: 'Successfully created new blog.', redirect: true, redirectURL: '/' });
         }
     });

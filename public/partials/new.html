@@ -1,8 +1,5 @@
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <div class="ui container">
-  <div id="response">
-    <pre></pre>
-</div>
 <form class="ui form center aligned" id="idForm"  action="/new" method=POST enctype="multipart/form-data" >
     <h2 class="ui center aligned header">Create a New Blog</h2>
   <div class="field">
@@ -32,17 +29,19 @@ $("#idForm").submit(function(e) {
               url + '/new', 
               data,
               function(data, textStatus, jqXHR){
-               $('#response pre').html( data )
+               data = eval(data);
                   if(data.redirect) {
                       window.location.href = data.redirectURL;
                   }
+                  return alert("Hey"),
+                  'text'
               }       
       )
                 .fail(function(jqXhr, textStatus, errorThrown){
                 console.log(errorThrown );
               });
 
-      e.preventDefault();
+      // e.preventDefault();
   
 });
 </script>
